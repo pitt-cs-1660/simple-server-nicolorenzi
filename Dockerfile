@@ -21,9 +21,6 @@ WORKDIR /app
 
 COPY --from=builder /app/.venv /app/.venv
 
-## COPY --from=builder /app/tests ./tests
-## COPY . /tests
-
 COPY . /app
 
 RUN useradd -m app && chown -R app:app /app
