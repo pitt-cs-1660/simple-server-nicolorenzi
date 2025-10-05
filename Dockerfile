@@ -9,19 +9,24 @@ COPY pyproject.toml ./
 
 RUN uv sync --no-install-project --no-editable
 
+COPY . ./
+
+RUN uv sync --no-editable
+
 ## final stage
 FROM python:3.12-slim AS final
 
 ENV VIRTUAL_ENV=/app/.venv
 ENV PATH="/app/.venv/bin:${PATH}"
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
-ENV PYTHONPATH=/app
 
 WORKDIR /app
 
 COPY --from=builder /app/.venv /app/.venv
 
-COPY . /app
+COPY --from=builder /app/tests ./tests
+
+COPY --from=builder /app/cc_simple_server ./cc_simple_server
 
 RUN useradd -m app && chown -R app:app /app
 
