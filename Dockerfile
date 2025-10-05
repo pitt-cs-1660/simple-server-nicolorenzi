@@ -16,11 +16,14 @@ ENV VIRTUAL_ENV=/app/.venv
 ENV PATH="/app/.venv/bin:${PATH}"
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
 
+WORKDIR /app
+
 COPY --from=builder /app/.venv /app/.venv
 
-COPY . /tests
+## COPY --from=builder /app/tests ./tests
+## COPY . /tests
 
-COPY . /cc_simple_server ./
+COPY . /app
 
 RUN useradd -m app
 
