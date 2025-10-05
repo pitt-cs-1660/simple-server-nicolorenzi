@@ -15,6 +15,7 @@ FROM python:3.12-slim AS final
 ENV VIRTUAL_ENV=/app/.venv
 ENV PATH="/app/.venv/bin:${PATH}"
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
+ENV PYTHONPATH=/app
 
 WORKDIR /app
 
@@ -25,7 +26,9 @@ COPY --from=builder /app/.venv /app/.venv
 
 COPY . /app
 
-RUN useradd -m app
+RUN useradd -m app && chown -R app:app /app
+
+USER app
 
 EXPOSE 8000
 
